@@ -1,3 +1,5 @@
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 public class Brackets {
@@ -9,6 +11,8 @@ public class Brackets {
         System.out.println(solution(str));
 
     }
+
+    Set<Integer> secik = new HashSet<>();
 
     public static int solution(String string) {
 

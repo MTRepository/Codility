@@ -1,56 +1,59 @@
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class FibFrog {
 
-        public static void main(String[] args) {
+    public static void main(String[] args) {
 
-            int[] A = {0,0,0,1,1,0,1,0,0,0,0,1};
+        int[] array = {0,1,0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0};
 
-            solution(A);
-
-        }
-
-        public static void solution(int[] array) {
-
-            List<Integer> fibbs = new LinkedList<>();
-
-            int fibbOne = 1;
-            int fibbTwo = 1;
-        int nextFibb = 1;
-
-        fibbs.add(1);   // inserts the first element
-
-        while(nextFibb <= array.length + 1) {
-            nextFibb = fibbOne + fibbTwo;
-            fibbs.add(0,nextFibb);
-            fibbOne = fibbTwo;
-            fibbTwo = nextFibb;
-        }
-        fibbs.remove(0);    // removes first wrong element
-
-        System.out.println(fibbs);
-
-        int jumpsToMake = array.length;
-        if(jumpsToMake == fibbs.get(0)) System.out.println(1);
-
-        int numOfSteps = 0;
-        int position = 0;
-        int jumpSpanIndex = jumpsToMake;
-
-        System.out.println("jumps to make: " + jumpsToMake);
-
-        while(position < array.length) {
-
-            jumpSpanIndex = 0;
-            while(array[position+fibbs.get(jumpSpanIndex)] == 0) {
-                jumpSpanIndex++;
-            }
-            System.out.println("jumpspanindex: " + fibbs.get(jumpSpanIndex));
-
-            position += fibbs.get(jumpSpanIndex);
-        }
+        System.out.println(solution(array));
 
     }
+
+    public static int solution(int[] array) {
+
+        Set<Integer> fibbs = new HashSet<>();
+
+        int firstFibb = 1;
+        int secondFibb = 1;
+        int currFibb = 1;
+
+        while (currFibb <= 100_000) {
+            currFibb = firstFibb + secondFibb;
+            fibbs.add(currFibb);
+            firstFibb = secondFibb;
+            secondFibb = currFibb;
+        }
+
+        List<Integer> list = new ArrayList<>();
+
+        int counter = 0; // first element represents step one
+        for (int i = array.length-1; i >=0; i--) {
+            if(array[i] == 0) {
+                counter++;
+            }else if(array[i] == 1 && fibbs.contains(counter+1)) {
+                list.add(++counter);
+                counter = 0;
+            } else {
+                counter++;
+            }
+        }
+        list.add(counter + 1);
+
+        for (int i = 0; i < list.size(); i++) {
+            if(!fibbs.contains(list.get(i))) return -1;
+        }
+
+        for (int i = list.size()-1; i > 0; i--) {
+            if(fibbs.contains(list.get(i) + list.get(i-1))) {
+                list.set(i-1, list.get(i-1) + list.get(i));
+                list.remove(i);
+            }
+        }
+
+        return list.size();
+
+    }
+
 
 }

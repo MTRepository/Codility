@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 public class Flags {
@@ -46,6 +45,7 @@ public class Flags {
             if(peakCounter < i) return i;
         }
         return 1;
+
     }
 
 }
